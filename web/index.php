@@ -102,6 +102,35 @@ $jsonResult = json_encode($resultArray, JSON_PRETTY_PRINT | JSON_FORCE_OBJECT);
 });	
 
 
+$app->get('/limpiarDatos', function () use ($app) {
+
+$dbconn = pg_pconnect("host=ec2-54-152-40-168.compute-1.amazonaws.com port=5432 dbname=da5l2p8fhao45b user=rvjdadbcfsozcx password=d568c86e4a84d477292656b6718984c408f607f5459bca9b6eaf550604dfcf66");
+
+	
+	$query_last = "SELECT * FROM lecturas ORDER BY id DESC LIMIT 1";
+	$query_first = "SELECT * FROM lecturas ORDER BY id ASC LIMIT 1";
+
+	$consulta_last = pg_query($dbconn, $query_last);
+	$consulta_first = pg_query($dbconn, $query_first);
+
+	$id_last = pg_fetch_result($consulta_last, null, 0);
+	$id_first = pg_fetch_result($consulta_first, null, 0);
+
+	
+	$registros = $id_last - $id_first + 1;
+
+		
+		if($registros >=100){
+		$id_borrar = $id_last - 200;
+		$query_delete = "DELETE FROM lecturas WHERE id<=" .$id_borrar.";";
+		$consulta_delete = pg_query($dbconn, $query_delete);
+		return "Se borraron los registros";
+	}
+	else{
+		return "No se borraron los registros";
+	}
+});
+
 //Ruta de demostración, se recibe(n) dato(s) y se manipulan
 $app->post('/postArduino', function (Request $request) use ($app) {
    	return "OK";
