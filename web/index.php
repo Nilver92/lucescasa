@@ -120,8 +120,8 @@ $dbconn = pg_pconnect("host=ec2-54-152-40-168.compute-1.amazonaws.com port=5432 
 	$registros = $id_last - $id_first + 1;
 
 		
-		if($registros >=100){
-		$id_borrar = $id_last - 200;
+		if($registros >=1000){
+		$id_borrar = $id_last - 500;
 		$query_delete = "DELETE FROM lecturas WHERE id<=" .$id_borrar.";";
 		$consulta_delete = pg_query($dbconn, $query_delete);
 		return "Se borraron los registros";
