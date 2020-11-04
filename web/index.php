@@ -67,7 +67,7 @@ $dbconn = pg_pconnect("host=ec2-54-152-40-168.compute-1.amazonaws.com port=5432 
 
 
 
-$query = "SELECT * FROM lecturas ORDER BY id DESC LIMIT 15";
+$query = "SELECT * FROM lecturas ORDER BY id ASC LIMIT 15";
 
 	$consulta = pg_query($dbconn, $query);
 
