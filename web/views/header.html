@@ -116,6 +116,46 @@
         
       }
   </script>
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+      
+          function drawChart() {
+
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Temp 1', 0], 
+          ['Temp 2', 0],
+        ]);
+
+        var options = {
+          max : 2000,
+          width: 250, height: 250,
+          redFrom: 1900, redTo: 2000,
+          yellowFrom:1800, yellowTo:1900,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('Medidores 3'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+            var JSON=$.ajax({
+                url:"https://lucescasa.herokuapp.com/consultardato",
+                dataType: 'json',
+                async: false}).responseText;
+            var Respuesta=jQuery.parseJSON(JSON);
+            
+           data.setValue(0, 1,Respuesta[0].Temp1);    
+           data.setValue(1, 1,Respuesta[0].Temp2);   
+       
+          chart.draw(data, options);
+        }, 1300);
+        
+      }
+  </script>
 
 
 
