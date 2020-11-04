@@ -101,6 +101,53 @@ $jsonResult = json_encode($resultArray, JSON_PRETTY_PRINT | JSON_FORCE_OBJECT);
   return $response;
 });	
 
+$app->get('/getDataGoogle', function () use ($app) {
+        
+    $dbconn = pg_pconnect("host=ec2-54-152-40-168.compute-1.amazonaws.com port=5432 dbname=da5l2p8fhao45b user=rvjdadbcfsozcx password=d568c86e4a84d477292656b6718984c408f607f5459bca9b6eaf550604dfcf66");
+
+	$query = 'SELECT * FROM lecturas ORDER BY "fecha" DESC LIMIT 15';
+
+	$consulta = pg_query($dbconn, $query);
+
+	$table = array();
+	$table['cols'] = array(
+		array('id' => 'fecha', 'label' => 'FECHA', 'type' => 'datetime'),
+		array('id' => 'Voltbat', 'label' => 'V Bateria', 'type' => 'number'),
+		array('id' => 'Voltpanel', 'label' => 'V Panel', 'type' => 'number')
+	);
+
+	$rows = array();
+
+	while($r = pg_fetch_assoc($consulta)) {
+	    $temp = array();
+	    $fecha_temp = strtotime($r['fecha']);
+	    $fecha_temp = $fecha_temp * 1000;
+	    // each column needs to have data inserted via the $temp array
+	    $temp[] = array('v' => 'Date('.$fecha_temp.')'); 
+	    $temp[] = array('v' => $r['Voltbat']);
+	    $temp[] = array('v' => $r['Voltpanel']);
+	    // etc...
+
+	    // insert the temp array into $rows
+	    $rows[] = array('c' => $temp); 
+  	}
+
+	// populate the table with rows of data
+	  $table['rows'] = $rows;
+
+	// encode the table as JSON
+	  $jsonTable = json_encode($table, JSON_PRETTY_PRINT);
+
+	  $jsonResult = json_encode($resultArray, JSON_PRETTY_PRINT | JSON_FORCE_OBJECT);
+
+	  $response = new Response();
+	  $response->setContent(htmlspecialchars_decode($jsonTable, ENT_QUOTES));
+	  $response->setCharset('UTF-8');
+	  $response->headers->set('Content-Type', 'application/json');
+
+	  //return htmlspecialchars_decode($jsonTable, ENT_QUOTES);
+	  return $response;
+	});
 
 $app->get('/limpiarDatos', function () use ($app) {
 
