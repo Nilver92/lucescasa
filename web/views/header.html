@@ -44,7 +44,7 @@
           ['Label', 'Value'],
           ['V Bat', 0],
           ['V Panel', 0],
-          ['I Panel', 0], 
+          
         ]);
 
         var options = {
@@ -68,7 +68,7 @@
             
           data.setValue(0, 1,Respuesta[0].Voltbat);
           data.setValue(1, 1,Respuesta[0].Voltpanel);
-           data.setValue(2, 1,Respuesta[0].Ipanel);    
+             
           
        
           chart.draw(data, options);
@@ -111,8 +111,8 @@
                 async: false}).responseText;
             var Respuesta=jQuery.parseJSON(JSON);
             
-           data.setValue(2, 1,Respuesta[0].Ipanel);    
-           data.setValue(2, 1,Respuesta[0].mWatt);   
+           data.setValue(0, 1,Respuesta[0].Ipanel);    
+           data.setValue(1, 1,Respuesta[0].mWatt);   
        
           chart.draw(data, options);
         }, 1300);
